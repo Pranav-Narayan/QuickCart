@@ -4,7 +4,7 @@ import { assets } from "@/assets/assets";
 import Link from "next/link"
 import { useAppContext } from "@/context/AppContext";
 import Image from "next/image";
-import Login from "./Login";
+import Login from "./LoginForm";
 
 const Navbar = () => {
   const { isSeller, router, userName } = useAppContext();
