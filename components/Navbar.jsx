@@ -5,12 +5,23 @@ import Link from "next/link"
 import { useAppContext } from "@/context/AppContext";
 import Image from "next/image";
 import Login from "./LoginForm";
+import Signup from "./SignupForm"
+import toast from 'react-hot-toast';
+import axios from "axios";
 
 const Navbar = () => {
-  const { isSeller, router, userName } = useAppContext();
-  const [showLogin, setShowLogin] = useState(false)
-  const onLogin = () => {
-    setShowLogin(true)
+  const { isSeller, router, userName, onLogin, onSignup } = useAppContext();
+  const [dropDown, setDropDown] = useState(false);
+
+  const onLogout = async () => {
+    try {
+      await axios.post("/api/authentication/logout")
+      window.location.href = '/';
+      toast.success("Logout successful")
+    } catch (error) {
+      console.log("Logout Error ::", error)
+      toast.error("Logout Failed ! Try again")
+    }
   }
 
   return (
@@ -29,23 +40,61 @@ const Navbar = () => {
           <a href="/all-products" className="hover:text-gray-900 transition">
             Shop
           </a>
-          <Link href="/" className="hover:text-gray-900 transition">
+          <a href="/aboutus" className="hover:text-gray-900 transition">
             About Us
-          </Link>
-          <Link href="/" className="hover:text-gray-900 transition">
+          </a>
+          <a href="/contact" className="hover:text-gray-900 transition">
             Contact
-          </Link>
+          </a>
 
           {isSeller && <button onClick={() => router.push('/seller')} className="text-xs border px-4 py-1.5 rounded-full">Seller Dashboard</button>}
 
         </div>
 
         <ul className="hidden md:flex items-center gap-4 " >
-          <Image className="w-4 h-4" src={assets.search_icon} alt="search icon" />
-          <button className="flex items-center gap-2 hover:text-gray-900 transition" onClick={onLogin}>
-            <Image src={assets.user_icon} alt="user icon" />
-            {userName ? "Profile" : "Account"}
-          </button>
+          <Image className="w-5 h-5" src={assets.search_icon} alt="search icon" />
+          {!userName
+            ? (
+              <button className="hover:text-gray-900 transition"
+                onMouseEnter={() => setDropDown(true)}
+                onMouseLeave={() => setDropDown(false)}
+              >
+                <div className="flex items-center gap-2 relative">
+                  <Image src={assets.user_icon} alt="user icon" />
+                  Account
+                </div>
+                {dropDown && (
+                  <ul className="absolute px-8 py-5 z-50 bg-white shadow-xl flex flex-col gap-3">
+                    <li className="hover:text-blue-700" onClick={onLogin}>Login</li>
+                    <li className="hover:text-blue-700" onClick={onSignup}>Signup</li>
+                  </ul>
+                )}
+              </button>)
+            : (
+              <button className="flex items-center justify-center gap-4">
+                {/* <Image className="h-6 w-6" src={assets.love} alt="user" /> */}
+                <Image className="h-6 w-6" src={assets.trolley} alt="user" />
+                <div
+                  onMouseEnter={() => setDropDown(true)}
+                  onMouseLeave={() => setDropDown(false)}
+                >
+                  <div className="flex gap-2 relative">
+                    <Image className="h-6 w-6" src={assets.user} alt="user" />
+                    Profile
+                  </div>
+                  {dropDown && (
+                    <ul className="absolute z-50 bg-white px-5 py-4 shadow-xl flex flex-col gap-3">
+                      <li className="text-lg font-bold">Hey <br />{userName}</li>
+                      <Link href="/account" className="hover:bg-black hover:text-white">Account</Link>
+                      <li className="hover:bg-black hover:text-white">wishlist</li>
+                      <li className="hover:bg-black hover:text-white">Contact Us</li>
+                      <li className="hover:bg-black hover:text-white" onClick={onLogout}>Logout</li>
+                    </ul>
+                  )}
+                </div>
+              </button>
+            )}
+
         </ul>
 
         <div className="flex items-center md:hidden gap-3">
@@ -56,8 +105,8 @@ const Navbar = () => {
           </button>
         </div>
       </nav >
-      <Login showLogin={showLogin} onClose={() => setShowLogin(false)} />
-
+      <Login />
+      <Signup />
     </>
   );
 };

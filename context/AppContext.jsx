@@ -2,6 +2,8 @@
 import { productsDummyData, userDummyData } from "@/assets/assets";
 import { useRouter } from "next/navigation";
 import { createContext, useContext, useEffect, useState } from "react";
+import axios from "axios";
+import toast from "react-hot-toast";
 
 export const AppContext = createContext();
 
@@ -9,36 +11,113 @@ export const useAppContext = () => {
     return useContext(AppContext)
 }
 
-export const AppContextProvider = ({ children, userName, userId }) => {
+export const AppContextProvider = ({ children, userName, userId, Email }) => {
 
     const currency = process.env.NEXT_PUBLIC_CURRENCY
     const router = useRouter()
 
-    const [products, setProducts] = useState([])
+    const [showLogin, setShowLogin] = useState(false);
+    const [showSignup, setShowSignup] = useState(false);
     const [userData, setUserData] = useState(false)
+
+    const [products, setProducts] = useState([])
+    const [wishlistItems, setWishlistItems] = useState([])
     const [isSeller, setIsSeller] = useState(true)
     const [cartItems, setCartItems] = useState({})
+    const [shippingAddress, setShippingAddress] = useState([])
+
+    const [buyProduct, setBuyproduct] = useState()
+    const [buyQuantity, setBuyQuantity] = useState(1)
+    const [buyTotalprice, setBuyTotal] = useState(0)
+
+    // Authentication form 
+    const onLogin = () => {
+        setShowLogin(!showLogin)
+    }
+
+    const onSignup = () => {
+        setShowSignup(!showSignup)
+    }
+
+    const fetchUserData = async () => {
+        if (!Email) {
+            return
+        }
+        try {
+            const response = await axios.post('/api/userData', { Email })
+            const userInfo = response.data.Data
+            setUserData(userInfo)
+            router.refresh();
+        } catch (error) {
+            console.log("Error User data fetching")
+        }
+
+    }
+
+    const fetchWishlistData = async () => {
+        if (!Email) return;
+
+        try {
+            const res = await axios.post('/api/userData', { Email });
+            const data = res.data.Data;
+            setWishlistItems(data?.WishList);
+        } catch (error) {
+            console.error("Failed to fetch wishlist:", error);
+        }
+    };
+
 
     const fetchProductData = async () => {
         setProducts(productsDummyData)
     }
 
-    const fetchUserData = async () => {
-        setUserData(userDummyData)
+    const fetchShippingAddress = async () => {
+        try {
+            const response = await axios.post('/api/userData', { Email })
+            const UserShippingAddress = response.data.Data.ShippingAddress
+            setShippingAddress(UserShippingAddress)
+        } catch (error) {
+            console.log("Error in FetchShipping Address::", error)
+        }
     }
 
     const addToCart = async (itemId) => {
 
-        let cartData = structuredClone(cartItems);
-        if (cartData[itemId]) {
-            cartData[itemId] += 1;
+        try {
+            axios.post('/api/cart/addtocart', { itemId, Email })
+            toast.success("Added to cart")
+        } catch (error) {
+            console.log("Error in AddToCart")
+            toast.error("Please try again")
         }
-        else {
-            cartData[itemId] = 1;
-        }
-        setCartItems(cartData);
-
     }
+    const BuyNow = async (ItemId) => {
+        const product = products.find(item => item._id === ItemId);
+        setBuyTotal(product.offerPrice * buyQuantity)
+        setBuyproduct(product)
+    }
+    const removeBuyProduct = (itemId) => {
+        setBuyproduct(null)
+    }
+    const updateBuyQuantity = async (actionOrValue) => {
+        let value = buyQuantity;
+
+        if (actionOrValue === 'increment') {
+            value = buyQuantity + 1;
+        } else if (actionOrValue === 'decrement') {
+            if (buyQuantity > 1) {
+                value = buyQuantity - 1;
+            }
+        } else if (typeof actionOrValue === 'number') {
+            value = actionOrValue > 0 ? actionOrValue : 1;
+        }
+
+        setBuyQuantity(value);
+
+        if (buyProduct) {
+            setBuyTotal(value * buyProduct.offerPrice);
+        }
+    };
 
     const updateCartQuantity = async (itemId, quantity) => {
 
@@ -79,9 +158,12 @@ export const AppContextProvider = ({ children, userName, userId }) => {
 
     useEffect(() => {
         fetchUserData()
-    }, [])
+    }, [Email])
+
+
 
     const value = {
+        showLogin, showSignup,
         currency, router,
         isSeller, setIsSeller,
         userData, fetchUserData,
@@ -89,7 +171,9 @@ export const AppContextProvider = ({ children, userName, userId }) => {
         cartItems, setCartItems,
         addToCart, updateCartQuantity,
         getCartCount, getCartAmount,
-        userName, userId
+        userName, userId, Email, shippingAddress, BuyNow, fetchShippingAddress,
+        onLogin, onSignup, wishlistItems, fetchWishlistData, buyProduct, removeBuyProduct,
+        buyQuantity, updateBuyQuantity, buyTotalprice
     }
     return (
         <AppContext.Provider value={value}>

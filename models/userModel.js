@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 
+
 const userSchema = new mongoose.Schema({
     Username: {
         type: String,
@@ -16,6 +17,32 @@ const userSchema = new mongoose.Schema({
         required: [true, "Please Provide A Password"],
         unique: false,
     },
+    phone: {
+        type: String,
+        required: false,
+        unique: false,
+        default: ""
+    },
+    isVerified: {
+        type: Boolean,
+        default: false
+    },
+    cartCount: {
+        type: Number,
+        default: 0,
+    },
+    CartList: {
+        type: Array,
+        default: []
+    },
+    WishList: {
+        type: Array,
+        default: []
+    },
+    ShippingAddress: {
+        type: Array,
+        default: []
+    }
 
 })
 

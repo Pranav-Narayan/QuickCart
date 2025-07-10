@@ -1,10 +1,13 @@
 import { addressDummyData } from "@/assets/assets";
 import { useAppContext } from "@/context/AppContext";
 import React, { useEffect, useState } from "react";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 const OrderSummary = () => {
-
-  const { currency, router, getCartCount, getCartAmount } = useAppContext()
+  const router = useRouter()
+  const { currency, getCartCount, getCartAmount, buyTotalprice, buyQuantity,
+    shippingAddress, fetchShippingAddress } = useAppContext()
   const [selectedAddress, setSelectedAddress] = useState(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
@@ -19,13 +22,25 @@ const OrderSummary = () => {
     setIsDropdownOpen(false);
   };
 
-  const createOrder = async () => {
-
-  }
 
   useEffect(() => {
     fetchUserAddresses();
   }, [])
+
+
+  useEffect(() => {
+    fetchShippingAddress()
+  }, [])
+
+
+  const createOrder = async () => {
+    if (!selectedAddress) {
+      toast.error("Select a Shipping Address")
+      return
+    }
+    router.push("/all-products")
+    toast.success("Order Placed....!")
+  }
 
   return (
     <div className="w-full md:w-96 bg-gray-500/5 p-5">
@@ -45,7 +60,9 @@ const OrderSummary = () => {
             >
               <span>
                 {selectedAddress
-                  ? `${selectedAddress.fullName}, ${selectedAddress.area}, ${selectedAddress.city}, ${selectedAddress.state}`
+                  ? `${selectedAddress.fullName}, ${selectedAddress.area}, ${selectedAddress.city}, 
+                  ${selectedAddress.state},
+                +91 ${selectedAddress.phoneNumber}`
                   : "Select Address"}
               </span>
               <svg className={`w-5 h-5 inline float-right transition-transform duration-200 ${isDropdownOpen ? "rotate-0" : "-rotate-90"}`}
@@ -57,13 +74,14 @@ const OrderSummary = () => {
 
             {isDropdownOpen && (
               <ul className="absolute w-full bg-white border shadow-md mt-1 z-10 py-1.5">
-                {userAddresses.map((address, index) => (
+                {shippingAddress.map((address, index) => (
                   <li
                     key={index}
                     className="px-4 py-2 hover:bg-gray-500/10 cursor-pointer"
                     onClick={() => handleAddressSelect(address)}
                   >
-                    {address.fullName}, {address.area}, {address.city}, {address.state}
+                    {address.fullName}, {address.area}, {address.city}, {address.state},
+                    {address.phoneNumber}
                   </li>
                 ))}
                 <li
@@ -97,8 +115,8 @@ const OrderSummary = () => {
 
         <div className="space-y-4">
           <div className="flex justify-between text-base font-medium">
-            <p className="uppercase text-gray-600">Items {getCartCount()}</p>
-            <p className="text-gray-800">{currency}{getCartAmount()}</p>
+            <p className="uppercase text-gray-600">Items {buyQuantity}</p>
+            <p className="text-gray-800">{currency}{Math.round(buyTotalprice * 100)/100}</p>
           </div>
           <div className="flex justify-between">
             <p className="text-gray-600">Shipping Fee</p>
@@ -106,11 +124,11 @@ const OrderSummary = () => {
           </div>
           <div className="flex justify-between">
             <p className="text-gray-600">Tax (2%)</p>
-            <p className="font-medium text-gray-800">{currency}{Math.floor(getCartAmount() * 0.02)}</p>
+            <p className="font-medium text-gray-800">{currency}{Math.floor(buyTotalprice * 0.01)}</p>
           </div>
           <div className="flex justify-between text-lg md:text-xl font-medium border-t pt-3">
             <p>Total</p>
-            <p>{currency}{getCartAmount() + Math.floor(getCartAmount() * 0.02)}</p>
+            <p>{currency}{Math.round(buyTotalprice * 100)/100 + Math.floor(Math.round(buyTotalprice * 100)/100 * 0.01)}</p>
           </div>
         </div>
       </div>

@@ -15,6 +15,7 @@ export default async function RootLayout({ children }) {
 
   let userId = null;
   let userName = null;
+  let Email = null;
 
   // Use try/catch because headers() is not always safe (e.g. /_not-found)
   try {
@@ -23,6 +24,7 @@ export default async function RootLayout({ children }) {
     if (headersList) {
       userId = headersList.get('x-user-id');
       userName = headersList.get('x-user-name');
+      Email = headersList.get('x-user-email');
     }
   } catch (err) {
     // If headers() fails (like in /_not-found), ignore
@@ -33,7 +35,7 @@ export default async function RootLayout({ children }) {
     <html lang="en">
       <body className={`${outfit.className} antialiased text-gray-700`} >
         <Toaster />
-        <AppContextProvider userName={userName} userId={userId}>
+        <AppContextProvider userName={userName} userId={userId} Email={Email}>
           {children}
         </AppContextProvider>
       </body>

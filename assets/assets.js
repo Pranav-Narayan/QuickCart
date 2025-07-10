@@ -41,11 +41,18 @@ import sm_controller_image from "./sm_controller_image.png";
 import jbl_soundbox_image from "./jbl_soundbox_image.png";
 import boy_with_laptop_image from "./boy_with_laptop_image.png";
 import checkmark from "./checkmark.png";
+import user from "./user.png";
+import trolley from "./trolley.png";
+import love from "./love.png";
 import product_details_page_apple_earphone_image1 from "./product_details_page_apple_earphone_image1.png";
 import product_details_page_apple_earphone_image2 from "./product_details_page_apple_earphone_image2.png";
 import product_details_page_apple_earphone_image3 from "./product_details_page_apple_earphone_image3.png";
 import product_details_page_apple_earphone_image4 from "./product_details_page_apple_earphone_image4.png";
 import product_details_page_apple_earphone_image5 from "./product_details_page_apple_earphone_image5.png";
+
+import Women_intro1 from "./Women_intro1.png";
+import Women_intro2 from "./Women_intro2.png";
+import Men_intro3 from "./Men_intro3.png";
 
 export const assets = {
   logo,
@@ -95,7 +102,14 @@ export const assets = {
   product_details_page_apple_earphone_image3,
   product_details_page_apple_earphone_image4,
   product_details_page_apple_earphone_image5,
-  checkmark
+  checkmark,
+  user,
+  trolley,
+  love,
+  
+  Women_intro1,
+  Women_intro2,
+  Men_intro3
 };
 
 export const BagIcon = () => {
@@ -417,12 +431,12 @@ export const addressDummyData = [
   {
     "_id": "67a1e4233f34a77b6dde9055",
     "userId": "user_2sZFHS1UIIysJyDVzCpQhUhTIhw",
-    "fullName": "GreatStack",
-    "phoneNumber": "0123456789",
-    "pincode": 654321,
-    "area": "Main Road , 123 Street, G Block",
-    "city": "City",
-    "state": "State",
+    "fullName": "Pranav mn",
+    "phoneNumber": "7034016568",
+    "pincode": 682025,
+    "area": "Main Road , 123 Street, Palarivattom",
+    "city": "Kochi",
+    "state": "Kerala",
     "__v": 0
   }
 ]
