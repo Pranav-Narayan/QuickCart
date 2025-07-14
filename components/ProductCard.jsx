@@ -28,7 +28,7 @@ const ProductCard = ({ product }) => {
         }
 
         try {
-            await axios.post('/api/cart/updateWishlist/add', { product, Email });
+            await axios.post('/api/cart/updateWishlist', { product, Email });
 
             toast.success(addedtoWishlist ? "Removed From Wishlist" : "Added To Wishlist");
             setWishlist(!addedtoWishlist);

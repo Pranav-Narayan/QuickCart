@@ -12,7 +12,6 @@ export async function POST(request) {
         if (!user) {
             return NextResponse.json({ message: "User not found" }, { status: 404 })
         }
-        let updateAction;
         const productId = product._id
 
         const isInWishlist = user.WishList.includes(productId);

@@ -1,5 +1,5 @@
 "use client"
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { assets } from "@/assets/assets";
 import Link from "next/link"
 import { useAppContext } from "@/context/AppContext";
@@ -10,8 +10,13 @@ import toast from 'react-hot-toast';
 import axios from "axios";
 
 const Navbar = () => {
-  const { isSeller, router, userName, onLogin, onSignup } = useAppContext();
+  const { isSeller, router, userName, onLogin, onSignup, cartItems, fetchCartData } = useAppContext();
   const [dropDown, setDropDown] = useState(false);
+
+  useEffect(() => {
+    fetchCartData()
+  }, [])
+
 
   const onLogout = async () => {
     try {
@@ -73,7 +78,10 @@ const Navbar = () => {
             : (
               <button className="flex items-center justify-center gap-4">
                 {/* <Image className="h-6 w-6" src={assets.love} alt="user" /> */}
-                <Image className="h-6 w-6" src={assets.trolley} alt="user" />
+                <div className="flex" onClick={() => router.push('/cart')}>
+                  <Image className="h-6 w-6" src={assets.trolley} alt="user" />
+                  {cartItems.length > 0 ? <span className="bg-black/75 text-white rounded-full h-2.5 w-2.5"></span> : <></>}
+                </div>
                 <div
                   onMouseEnter={() => setDropDown(true)}
                   onMouseLeave={() => setDropDown(false)}

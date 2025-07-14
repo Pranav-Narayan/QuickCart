@@ -1,7 +1,7 @@
 'use client'
 import { productsDummyData, userDummyData } from "@/assets/assets";
 import { useRouter } from "next/navigation";
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState, useCallback, act } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 
@@ -23,7 +23,7 @@ export const AppContextProvider = ({ children, userName, userId, Email }) => {
     const [products, setProducts] = useState([])
     const [wishlistItems, setWishlistItems] = useState([])
     const [isSeller, setIsSeller] = useState(true)
-    const [cartItems, setCartItems] = useState({})
+    const [cartItems, setCartItems] = useState([])
     const [shippingAddress, setShippingAddress] = useState([])
 
     const [buyProduct, setBuyproduct] = useState()
@@ -91,6 +91,30 @@ export const AppContextProvider = ({ children, userName, userId, Email }) => {
             toast.error("Please try again")
         }
     }
+    const fetchCartData = async () => {
+        try {
+            const response = await axios.post('/api/userData', { Email })
+            const cartitem = response.data.Data.CartList
+            setCartItems(cartitem || [])
+        } catch (error) {
+            console.log("Error in FetchShipping Address::", error)
+            setCartItems([]);
+        }
+    }
+
+    const removeCartItem = useCallback(async (itemId) => {
+        try {
+            await axios.post('/api/cart/removefromcart', { itemId, Email });
+            toast.success('Removed From Cart');
+            await fetchCartData();
+        } catch (error) {
+            console.log('Error in Remove item from cart', error);
+            toast.error('Please try again');
+        }
+    }, [Email, fetchCartData]);
+
+
+
     const BuyNow = async (ItemId) => {
         const product = products.find(item => item._id === ItemId);
         setBuyTotal(product.offerPrice * buyQuantity)
@@ -118,6 +142,15 @@ export const AppContextProvider = ({ children, userName, userId, Email }) => {
             setBuyTotal(value * buyProduct.offerPrice);
         }
     };
+    const updateCartProductQuantity = async (action, itemId) => {
+        try {
+            await axios.post('/api/cart/CartProductCount', { Email, itemId, action })
+            console.log("Product Count Updated...")
+        } catch (error) {
+            console.log("Error in Product count Update")
+        }
+
+    }
 
     const updateCartQuantity = async (itemId, quantity) => {
 
@@ -173,7 +206,7 @@ export const AppContextProvider = ({ children, userName, userId, Email }) => {
         getCartCount, getCartAmount,
         userName, userId, Email, shippingAddress, BuyNow, fetchShippingAddress,
         onLogin, onSignup, wishlistItems, fetchWishlistData, buyProduct, removeBuyProduct,
-        buyQuantity, updateBuyQuantity, buyTotalprice
+        buyQuantity, updateBuyQuantity, buyTotalprice, fetchCartData, removeCartItem, updateCartProductQuantity
     }
     return (
         <AppContext.Provider value={value}>
