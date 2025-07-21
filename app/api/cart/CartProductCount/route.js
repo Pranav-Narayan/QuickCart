@@ -8,20 +8,35 @@ export async function POST(request) {
     try {
         const reqbody = await request.json()
         const { Email, itemId, action } = reqbody;
-        console.log(action)
         const user = await User.findOne({ Email })
         if (!user) {
             return NextResponse.json(
                 { message: "User Not Found" }
             )
         }
-        if (action === 'increment') {
-            console.log("Increment")
-            return NextResponse.json({ message: "increment" })
+        const cartItem = user.CartList.find((item) => item.itemId === itemId);
+
+        if (!cartItem) {
+            return NextResponse.json({ message: "Cart Item Not Found" }, { status: 404 });
         }
-        else if (action == 'decrement') {
-            console.log("Decrement")
-            return NextResponse.json({ message: "decrement" })
+
+        if (action === "increment") {
+            await User.updateOne(
+                { Email, "CartList.itemId": itemId },
+                { $inc: { "CartList.$.count": 1 } }
+            );
+            return NextResponse.json({ message: "Item Count Incremented", success: true }, { status: 200 });
+        }
+        if (action === "decrement") {
+            if (cartItem.count > 1) {
+                await User.updateOne(
+                    { Email, "CartList.itemId": itemId },
+                    { $inc: { "CartList.$.count": -1 } }
+                );
+                return NextResponse.json({ message: "Item Count Decremented", success: true }, { status: 200 });
+            } else {
+                return NextResponse.json({ message: "Item count already at 0", success: false }, { status: 200 });
+            }
         }
 
         return NextResponse.json(

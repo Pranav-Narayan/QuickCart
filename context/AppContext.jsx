@@ -125,7 +125,7 @@ export const AppContextProvider = ({ children, userName, userId, Email }) => {
     }
     const updateBuyQuantity = async (actionOrValue) => {
         let value = buyQuantity;
-
+        
         if (actionOrValue === 'increment') {
             value = buyQuantity + 1;
         } else if (actionOrValue === 'decrement') {
@@ -142,10 +142,11 @@ export const AppContextProvider = ({ children, userName, userId, Email }) => {
             setBuyTotal(value * buyProduct.offerPrice);
         }
     };
-    const updateCartProductQuantity = async (action, itemId) => {
+    
+    const updateCartProductQuantity = async (itemId, action) => {
         try {
             await axios.post('/api/cart/CartProductCount', { Email, itemId, action })
-            console.log("Product Count Updated...")
+            await fetchCartData();
         } catch (error) {
             console.log("Error in Product count Update")
         }

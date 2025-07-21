@@ -1,15 +1,19 @@
 'use client'
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { assets } from "@/assets/assets";
 import OrderSummary from "@/components/OrderSummary";
+import ProductSummary from "@/components/ProductSummary" 
 import Image from "next/image";
 import Navbar from "@/components/Navbar";
+import Popup from "@/components/Popup";
 import { useAppContext } from "@/context/AppContext";
 import { createKey } from "next/dist/shared/lib/router/router";
 
 const Cart = () => {
 
-  const { products, router, cartItems, updateCartQuantity, fetchCartData, removeCartItem, updateCartProductQuantity } = useAppContext();
+  const { products, router, cartItems, updateCartQuantity, fetchCartData, updateCartProductQuantity } = useAppContext();
+  const [showPopup, setShowPopup] = useState(false)
+  const [removingItem, setRemovingItem] = useState("")
 
   useEffect(() => {
     fetchCartData()
@@ -45,6 +49,7 @@ const Cart = () => {
                 </tr>
               </thead>
               <tbody>
+
                 {cartItems && (cartItems.map((items) => {
                   const product = products.find(product => product._id === items.itemId);
                   return (
@@ -62,7 +67,7 @@ const Cart = () => {
                           </div>
                           <button
                             className="md:hidden text-xs text-orange-600 mt-1"
-                            onClick={() => removeCartItem(product._id)}
+                            onClick={() => { setShowPopup(true); setRemovingItem(product._id) }}
                           >
                             Remove
                           </button>
@@ -71,7 +76,7 @@ const Cart = () => {
                           <p className="text-gray-800">{product.name}</p>
                           <button
                             className="text-xs text-orange-600 mt-1"
-                            onClick={() => removeCartItem(product._id)}
+                            onClick={() => { setShowPopup(true); setRemovingItem(product._id) }}
                           >
                             Remove
                           </button>
@@ -113,7 +118,8 @@ const Cart = () => {
             Continue Shopping
           </button>
         </div>
-        <OrderSummary />
+        <ProductSummary />
+        {showPopup && <Popup ProductId={removingItem} onClose={() => setShowPopup(false)}/>}
       </div>
     </>
   );

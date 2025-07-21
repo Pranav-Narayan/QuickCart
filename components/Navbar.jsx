@@ -5,17 +5,20 @@ import Link from "next/link"
 import { useAppContext } from "@/context/AppContext";
 import Image from "next/image";
 import Login from "./LoginForm";
-import Signup from "./SignupForm"
+import Signup from "./SignupForm";
+import SearchProducts from "./SearchProducts";
 import toast from 'react-hot-toast';
 import axios from "axios";
+import { AnimatePresence } from "framer-motion";
 
 const Navbar = () => {
   const { isSeller, router, userName, onLogin, onSignup, cartItems, fetchCartData } = useAppContext();
   const [dropDown, setDropDown] = useState(false);
+  const [showSearchbar, setShowsearchbar] = useState(false)
 
   useEffect(() => {
     fetchCartData()
-  }, [])
+  }, [userName])
 
 
   const onLogout = async () => {
@@ -57,7 +60,7 @@ const Navbar = () => {
         </div>
 
         <ul className="hidden md:flex items-center gap-4 " >
-          <Image className="w-5 h-5" src={assets.search_icon} alt="search icon" />
+          <Image className="w-5 h-5" src={assets.search_icon} alt="search icon" onClick={() => setShowsearchbar(true)} />
           {!userName
             ? (
               <button className="hover:text-gray-900 transition"
@@ -115,6 +118,9 @@ const Navbar = () => {
       </nav >
       <Login />
       <Signup />
+      <AnimatePresence>
+        {showSearchbar && <SearchProducts close={() => { setShowsearchbar(false) }} />}
+      </AnimatePresence>
     </>
   );
 };

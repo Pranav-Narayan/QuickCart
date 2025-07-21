@@ -1,37 +1,23 @@
-import { addressDummyData } from "@/assets/assets";
 import { useAppContext } from "@/context/AppContext";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 
 const OrderSummary = () => {
   const router = useRouter()
-  const { currency, cartItems, buyTotalprice, buyQuantity,
-    shippingAddress, fetchShippingAddress } = useAppContext()
+  const { currency, cartItems, products, shippingAddress, fetchShippingAddress } = useAppContext()
   const [selectedAddress, setSelectedAddress] = useState(null);
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-
-  const [userAddresses, setUserAddresses] = useState([]);
-
-  const fetchUserAddresses = async () => {
-    setUserAddresses(addressDummyData);
-  }
-
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    
+    
   const handleAddressSelect = (address) => {
     setSelectedAddress(address);
     setIsDropdownOpen(false);
   };
 
-
-  useEffect(() => {
-    fetchUserAddresses();
-  }, [])
-
-
   useEffect(() => {
     fetchShippingAddress()
   }, [])
-
 
   const createOrder = async () => {
     if (!selectedAddress) {
@@ -42,6 +28,19 @@ const OrderSummary = () => {
     toast.success("Order Placed....!")
   }
 
+  
+  const cartTotal = useMemo(() => {
+      return cartItems.reduce((total, cartItem) => {
+        // console.log("total===",total)
+        // console.log("item ==",cartItem)
+      const product = products.find(prod => prod._id === cartItem.itemId);
+      if (!product) return total;
+      return total + (product.offerPrice * cartItem.count);
+    }, 0);
+  }, [cartItems, products]);
+
+  const tax = (cartTotal * 0.02).toFixed(2);
+
   return (
     <div className="w-full md:w-96 bg-gray-500/5 p-5">
       <h2 className="text-xl md:text-2xl font-medium text-gray-700">
@@ -49,6 +48,8 @@ const OrderSummary = () => {
       </h2>
       <hr className="border-gray-500/30 my-5" />
       <div className="space-y-6">
+
+        {/* Address Selection */}
         <div>
           <label className="text-base font-medium uppercase text-gray-600 block mb-2">
             Select Address
@@ -60,14 +61,11 @@ const OrderSummary = () => {
             >
               <span>
                 {selectedAddress
-                  ? `${selectedAddress.fullName}, ${selectedAddress.area}, ${selectedAddress.city}, 
-                  ${selectedAddress.state},
-                +91 ${selectedAddress.phoneNumber}`
+                  ? `${selectedAddress.fullName}, ${selectedAddress.area}, ${selectedAddress.city}, ${selectedAddress.state}, +91 ${selectedAddress.phoneNumber}`
                   : "Select Address"}
               </span>
               <svg className={`w-5 h-5 inline float-right transition-transform duration-200 ${isDropdownOpen ? "rotate-0" : "-rotate-90"}`}
-                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="#6B7280"
-              >
+                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="#6B7280">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
               </svg>
             </button>
@@ -80,8 +78,7 @@ const OrderSummary = () => {
                     className="px-4 py-2 hover:bg-gray-500/10 cursor-pointer"
                     onClick={() => handleAddressSelect(address)}
                   >
-                    {address.fullName}, {address.area}, {address.city}, {address.state},
-                    {address.phoneNumber}
+                    {address.fullName}, {address.area}, {address.city}, {address.state}, {address.phoneNumber}
                   </li>
                 ))}
                 <li
@@ -95,6 +92,7 @@ const OrderSummary = () => {
           </div>
         </div>
 
+        {/* Promo Code */}
         <div>
           <label className="text-base font-medium uppercase text-gray-600 block mb-2">
             Promo Code
@@ -113,10 +111,11 @@ const OrderSummary = () => {
 
         <hr className="border-gray-500/30 my-5" />
 
+        {/* Price Summary */}
         <div className="space-y-4">
           <div className="flex justify-between text-base font-medium">
-            <p className="uppercase text-gray-600">Items {buyQuantity}</p>
-            <p className="text-gray-800">{currency}{Math.round(buyTotalprice * 100)/100}</p>
+            <p className="uppercase text-gray-600">Items {cartItems.length}</p>
+            <p className="text-gray-800">{currency}{cartTotal.toFixed(2)}</p>
           </div>
           <div className="flex justify-between">
             <p className="text-gray-600">Shipping Fee</p>
@@ -124,11 +123,11 @@ const OrderSummary = () => {
           </div>
           <div className="flex justify-between">
             <p className="text-gray-600">Tax (2%)</p>
-            <p className="font-medium text-gray-800">{currency}{Math.floor(buyTotalprice * 0.01)}</p>
+            <p className="font-medium text-gray-800">{currency}{tax}</p>
           </div>
           <div className="flex justify-between text-lg md:text-xl font-medium border-t pt-3">
             <p>Total</p>
-            <p>{currency}{Math.round(buyTotalprice * 100)/100 + Math.floor(Math.round(buyTotalprice * 100)/100 * 0.01)}</p>
+            <p>{currency}{(parseFloat(cartTotal) + parseFloat(tax)).toFixed(2)}</p>
           </div>
         </div>
       </div>
