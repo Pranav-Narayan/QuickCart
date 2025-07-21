@@ -24,15 +24,18 @@ import header_headphone_image from "./header_headphone_image.png";
 import header_playstation_image from "./header_playstation_image.png";
 import header_macbook_image from "./header_macbook_image.png";
 import macbook_image from "./macbook_image.png";
-import bose_headphone_image from "./bose_headphone_image.png";
+import bose_headphone_image from "./productImages/BoseQuietComfort1.png";
+import bose_headphone_image2 from "./productImages/BoseQuietComfort2.png";
+import bose_headphone_image3 from "./productImages/BoseQuietComfort3.png";
+import bose_headphone_image4 from "./productImages/BoseQuietComfort4.png";
 import apple_earphone_image from "./apple_earphone_image.png";
-import samsung_s23phone_image from "./samsung_s23phone_image.png";
-import venu_watch_image from "./venu_watch_image.png";
+import samsung_s23phone_image from "./productImages/samsung_s23phone_image.png";
+import venu_watch_image from "./productImages/venu_watch_image.png";
 import upload_area from "./upload_area.png";
 import cannon_camera_image from "./cannon_camera_image.png";
-import sony_airbuds_image from "./sony_airbuds_image.png";
+import sony_airbuds_image from "./productImages/sony_airbuds_image.png";
 import asus_laptop_image from "./asus_laptop_image.png";
-import projector_image from "./projector_image.png";
+import projector_image from "./productImages/projector_image.png";
 import playstation_image from "./playstation_image.png";
 import girl_with_headphone_image from "./girl_with_headphone_image.png";
 import girl_with_earphone_image from "./girl_with_earphone_image.png";
@@ -44,12 +47,17 @@ import checkmark from "./checkmark.png";
 import user from "./user.png";
 import trolley from "./trolley.png";
 import love from "./love.png";
-import product_details_page_apple_earphone_image1 from "./product_details_page_apple_earphone_image1.png";
-import product_details_page_apple_earphone_image2 from "./product_details_page_apple_earphone_image2.png";
-import product_details_page_apple_earphone_image3 from "./product_details_page_apple_earphone_image3.png";
-import product_details_page_apple_earphone_image4 from "./product_details_page_apple_earphone_image4.png";
-import product_details_page_apple_earphone_image5 from "./product_details_page_apple_earphone_image5.png";
-
+import AppleEarpode1 from "./productImages/AppleEarpode1.png";
+import AppleEarpode2 from "./productImages/AppleEarpode2.png";
+import AppleEarpode3 from "./productImages/AppleEarpode3.png";
+import AppleEarpode4 from "./productImages/AppleEarpode4.png";
+import Marshallwoburn1 from './productImages/Marshall-Woburn1.png';
+import Marshallwoburn2 from './productImages/Marshall-Woburn2.png';
+import Marshallwoburn3 from './productImages/Marshall-Woburn3.png';
+import Marshallwoburn4 from './productImages/Marshall-Woburn4.png';
+import ReavonUBR1 from './productImages/Reavon-UBR1.png'
+import ReavonUBR2 from './productImages/Reavon-UBR3.png'
+import ReavonUBR3 from './productImages/Reavon-UBR2.png'
 import Women_intro1 from "./Women_intro1.png";
 import Women_intro2 from "./Women_intro2.png";
 import Men_intro3 from "./Men_intro3.png";
@@ -82,6 +90,9 @@ export const assets = {
   header_macbook_image,
   macbook_image,
   bose_headphone_image,
+  bose_headphone_image2,
+  bose_headphone_image3,
+  bose_headphone_image4,
   apple_earphone_image,
   samsung_s23phone_image,
   venu_watch_image,
@@ -97,16 +108,22 @@ export const assets = {
   sm_controller_image,
   jbl_soundbox_image,
   boy_with_laptop_image,
-  product_details_page_apple_earphone_image1,
-  product_details_page_apple_earphone_image2,
-  product_details_page_apple_earphone_image3,
-  product_details_page_apple_earphone_image4,
-  product_details_page_apple_earphone_image5,
+  AppleEarpode1,
+  AppleEarpode2,
+  AppleEarpode3,
+  AppleEarpode4,
+  Marshallwoburn1,
+  Marshallwoburn2,
+  Marshallwoburn3,
+  Marshallwoburn4,
+  ReavonUBR1,
+  ReavonUBR2,
+  ReavonUBR3,
   checkmark,
   user,
   trolley,
   love,
-  
+
   Women_intro1,
   Women_intro2,
   Men_intro3
@@ -153,10 +170,10 @@ export const productsDummyData = [
     "price": 499.99,
     "offerPrice": 399.99,
     "image": [
-      "https://raw.githubusercontent.com/avinashdm/gs-images/main/quickcart/k4dafzhwhgcn5tnoylrw.webp",
-      "https://raw.githubusercontent.com/avinashdm/gs-images/main/quickcart/j212frakb8hdrhvhajhg.webp",
-      "https://raw.githubusercontent.com/avinashdm/gs-images/main/quickcart/imwuugqxsajuwqpkegb5.webp",
-      "https://raw.githubusercontent.com/avinashdm/gs-images/main/quickcart/k1oqaslw5tb3ebw01vvj.webp"
+      assets.AppleEarpode1,
+      assets.AppleEarpode2,
+      assets.AppleEarpode3,
+      assets.AppleEarpode4,
     ],
     "category": "Earphone",
     "date": 1738667236865,
@@ -170,7 +187,10 @@ export const productsDummyData = [
     "price": 429.99,
     "offerPrice": 329.99,
     "image": [
-      "https://raw.githubusercontent.com/avinashdm/gs-images/main/quickcart/m16coelz8ivkk9f0nwrz.webp"
+      assets.bose_headphone_image,
+      assets.bose_headphone_image2,
+      assets.bose_headphone_image3,
+      assets.bose_headphone_image4,
     ],
     "category": "Headphone",
     "date": 1738667310300,
@@ -287,7 +307,40 @@ export const productsDummyData = [
     "category": "Laptop",
     "date": 1738668619198,
     "__v": 0
-  }
+  },
+  {
+    "_id": "67a1fa4b3f34a77b6dde1313",
+    "userId": "user_2sZFHS1UIIysJyDVzCpQhUhTIhw",
+    "name": "Marshall Woburn III",
+    "description": "A powerful newcomer, the Woburn III has been re-engineered with a new three-way driver system which delivers greater clarity whether you use it as home audio, or as a TV speaker. Dynamic Loudness adjusts the tonal balance of this Bluetooth speaker, delivering you the very best from home audio.",
+    "price": 699.99,
+    "offerPrice": 649.99,
+    "image": [
+      assets.Marshallwoburn1,
+      assets.Marshallwoburn2,
+      assets.Marshallwoburn3,
+      assets.Marshallwoburn4,
+    ],
+    "category": "Earphone",
+    "date": 1738668619198,
+    "__v": 0
+  },
+  // {
+  //   "_id": "67a1fa4b3f34a77b6dde1414",
+  //   "userId": "user_2sZFHS1UIIysJyDVzCpQhUhTIhw",
+  //   "name": "Reavon UBR-X200",
+  //   "description": "This flagship universal disc player has been finely engineered for the ideal disc playback. The UBR-X200 features extremely rigid construction to achieve high S/N ratio for quality audio and video performance. With support for the spectacular Ultra HD Blu-ray™ format, you can enjoy a beautiful experience with four times the resolution of 1080p Full HD.  The UBR-X200 is compatible with the latest Dolby Vision® format that provides a stunning HDR imaging technology with extraordinary color, contrast, and brightness to the screen. Texas Instruments Burr-Brown Audio PCM1690 Series DACs are used to provide audiophile sound.",
+  //   "price": 3249.99,
+  //   "offerPrice": 3299.99,
+  //   "image": [
+  //     assets.ReavonUBR3,
+  //     assets.ReavonUBR1,
+  //     assets.ReavonUBR2,
+  //   ],
+  //   "category": "Earphone",
+  //   "date": 1738668619198,
+  //   "__v": 0
+  // }
 ]
 
 export const userDummyData = {
