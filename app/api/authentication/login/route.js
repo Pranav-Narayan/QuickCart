@@ -15,14 +15,14 @@ export async function POST(request) {
         const user = await User.findOne({ Email });
         if (!user) {
             console.log("User Not Found");
-            return NextResponse.json({ error: "User Not Found" }, { status: 404 });
+            return NextResponse.json({ error: "Invalid Email Address" });
         }
 
         // Password Validation
         const validPassword = await bcryptjs.compare(Password, user.Password);
         if (!validPassword) {
             console.log("Incorrect Password");
-            return NextResponse.json({ error: "Invalid Password" }, { status: 404 });
+            return NextResponse.json({ error: "Invalid Password" });
         }
 
         // Token generation with jose

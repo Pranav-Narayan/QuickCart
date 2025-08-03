@@ -41,7 +41,7 @@ const SearchProducts = ({ close }) => {
           </div>
           <button className='px-5 bg-orange-500 text-white' onClick={close}>Close</button>
         </div>
-        <div className='w-3/4 bg-white mt-6 rounded grid gap-2 overflow-scroll'>
+        <div className='w-3/4 bg-white mt-6 rounded grid gap-2'>
           {filteredProducts.length > 0 ? (
             filteredProducts.map(product => {
               console.log("Product image ==", product.image[0])

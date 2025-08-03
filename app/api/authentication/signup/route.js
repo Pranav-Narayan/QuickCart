@@ -15,7 +15,7 @@ export async function POST(request) {
             return NextResponse.json(
                 { message: "Email already Exists" },
                 { status: 404 }
-            )
+            ) 
         }
 
         const salt = await bcryptjs.genSalt(10)

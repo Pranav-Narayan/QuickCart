@@ -2,28 +2,34 @@
 import React, { useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { RiCloseLargeLine } from "react-icons/ri";
-import { FaGoogle, FaApple, FaFacebookF, FaEyeSlash, FaEye } from "react-icons/fa";
+import { FaEyeSlash, FaEye } from "react-icons/fa";
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 import { useAppContext } from "@/context/AppContext";
+import { assets } from '@/assets/assets'
+import google from "../assets/google.png"
 
 const Login = () => {
 
     const router = useRouter()
     const { showLogin, showSignup, onLogin, onSignup } = useAppContext();
     const [showPassword, setShowPassword] = useState(false)
+    const [message,setMessage] = useState()
     const [user, setUser] = useState({
         Email: "",
         Password: ""
     })
-
     const LoginHandle = async () => {
         try {
-            await axios.post('/api/authentication/login', user)
-            toast.success('Login successful!');
-            onLogin()
-            router.refresh();
+            const response = await axios.post('/api/authentication/login', user)
+            setMessage(response.data.error)
+            if (response.data.success) {
+                toast.success('Login successful!');
+                onLogin()
+                router.refresh();
+            }
+
 
         } catch (error) {
             console.log("Error in Login Button Click :: ", error)
@@ -68,7 +74,7 @@ const Login = () => {
 
                             </div>
                         </div>
-
+                        {message && <p className='text-xs text-red-600 capitalize'>* {message}</p>}
                         <div className='flex justify-center items-center'>
                             <button className='bg-orange-500 py-2 px-8 text-white rounded-2xl text-lg' onClick={LoginHandle}>Login</button>
                         </div>
@@ -76,10 +82,9 @@ const Login = () => {
                             <p onClick={onSignup}>Don't have Account</p>
                             <p>Forgot Password</p>
                         </div>
-                        <div className='flex justify-center gap-1 text-2xl'>
-                            <FaGoogle />
-                            <FaApple />
-                            <FaFacebookF />
+                        <div className='flex justify-center items-center gap-2 border-2 border-black/30 py-1 rounded-xl'>
+                            <img src="/google.png" alt="" className='w-4 h-4'/>
+                            <button>Login With Google</button>
                         </div>
                     </div>
                 </motion.div>

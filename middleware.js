@@ -3,7 +3,8 @@ import { jwtVerify } from "jose";
 
 export async function middleware(request) {
 
-    // const path = request.nextUrl.pathname;
+    const path = request.nextUrl.pathname;
+
     // const isPublicpath = path === '/cart' || path === '/Buynow'
 
     // Skip middleware for static assets and API routes
@@ -15,13 +16,11 @@ export async function middleware(request) {
         return NextResponse.next();
     }
 
-    console.log("Middleware processing URL:", request.url);
-
+    const isPublicpath = path === '/cart' || path === '/Buynow' || path === '/add-address' || path === '/account'
     const token = request.cookies.get("token")?.value;
-
-    // if (isPublicpath && !token) {
-    //     return NextResponse.redirect(new URL('/Login', request.url))
-    // }
+    if (isPublicpath && !token) {
+        return NextResponse.redirect(new URL('/', request.url))
+    }
 
     if (!token) {
         console.log("No token found in cookies");

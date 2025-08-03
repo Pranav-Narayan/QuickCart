@@ -20,7 +20,7 @@ const page = () => {
                 <div className='flex gap-8'>
                     <div className="flex-none w-80 flex flex-col gap-4">
                         <div className="flex gap-4 items-center bg-neutral-50 shadow-md px-5 py-4">
-                            <div className='bg-black text-white w-5 h-5 rounded-full flex items-center justify-center p-5 text-2xl'>{userName.charAt(0).toUpperCase() + userName.slice(1, 2)}</div>
+                            <div className='bg-black text-white w-5 h-5 rounded-full flex items-center justify-center p-5 text-2xl'>{userName?.charAt(0).toUpperCase() + userName?.slice(1, 2)}</div>
                             <div className="flex flex-col">
                                 <span>Hi,</span>
                                 <h2 className='font-semibold text-lg'>{userName}</h2>

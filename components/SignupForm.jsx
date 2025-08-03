@@ -80,10 +80,9 @@ const SignupForm = () => {
                             <p onClick={onLogin}>Already have Account</p>
 
                         </div>
-                        <div className='flex justify-center gap-1 text-2xl'>
-                            <FaGoogle />
-                            <FaApple />
-                            <FaFacebookF />
+                        <div className='flex justify-center items-center gap-2 border-2 border-black/30 py-1 rounded-xl'>
+                            <img src="/google.png" alt="" className='w-4 h-4' />
+                            <button>Signup With Google</button>
                         </div>
                     </div>
                 </motion.div>

@@ -47,6 +47,7 @@ import checkmark from "./checkmark.png";
 import user from "./user.png";
 import trolley from "./trolley.png";
 import love from "./love.png";
+import google from "./google.png";
 import AppleEarpode1 from "./productImages/AppleEarpode1.png";
 import AppleEarpode2 from "./productImages/AppleEarpode2.png";
 import AppleEarpode3 from "./productImages/AppleEarpode3.png";
@@ -123,7 +124,7 @@ export const assets = {
   user,
   trolley,
   love,
-
+  google,
   Women_intro1,
   Women_intro2,
   Men_intro3
@@ -170,7 +171,7 @@ export const productsDummyData = [
     "price": 499.99,
     "offerPrice": 399.99,
     "image": [
-      assets.AppleEarpode1,
+      "https://raw.githubusercontent.com/avinashdm/gs-images/main/quickcart/k4dafzhwhgcn5tnoylrw.webp",
       assets.AppleEarpode2,
       assets.AppleEarpode3,
       assets.AppleEarpode4,
